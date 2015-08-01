@@ -91,7 +91,13 @@ func (g *MapGenerator) RegisterHeightGenerator(f func(...*Tile) uint64) {
 func (g *MapGenerator) AddTile(t *Tile) {
 	g.context = append(g.context, t)
 	g.pointer.X += t.Stop.X - t.Start.X
-	g.pointer.Y += t.Stop.Y - t.Start.Y
+
+	// Do not allow negative y values
+	if t.Height() < 0 && uint64(-1*t.Height()) > g.pointer.Y {
+		g.pointer.Y = 0
+	} else {
+		g.pointer.Y += uint64(t.Height())
+	}
 }
 
 func NewGenerator() *MapGenerator {

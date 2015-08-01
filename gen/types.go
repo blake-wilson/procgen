@@ -18,6 +18,10 @@ func (t *Tile) Width() uint64 {
 	return t.Stop.X - t.Start.X
 }
 
+func (t *Tile) Height() int64 {
+	return int64(t.Stop.Y) - int64(t.Start.Y)
+}
+
 func NewTile(left Coord, right Coord, attributes map[string]interface{}) *Tile {
 	if right.X <= left.X {
 		// left coordinate must precede right
