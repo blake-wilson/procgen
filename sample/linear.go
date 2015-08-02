@@ -3,12 +3,13 @@ package main
 import (
 	"fmt"
 
+	"github.com/blake-wilson/procgen/format"
 	"github.com/blake-wilson/procgen/gen"
 )
 
 // Samples are used to test the API
 
-func main() {
+func linearGen() {
 	// create a map Generator
 	g := gen.NewGenerator()
 
@@ -34,10 +35,6 @@ func main() {
 	}
 
 	tiles := g.GetTiles()
-	fmt.Printf("%v, %v\n", tiles[0].Start.X, tiles[0].Start.Y)
-	for _, tile := range tiles {
-		// print out the only values interested in: the positions of the
-		// tiles. This generator did not generate any other attributes
-		fmt.Printf("%v, %v\n", tile.Stop.X, tile.Stop.Y)
-	}
+	csv := format.SprintCSV(tiles...)
+	fmt.Printf(csv)
 }

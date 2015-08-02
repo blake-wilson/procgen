@@ -51,8 +51,8 @@ func (g *MapGenerator) GetTiles() []*Tile {
 // Generates the next tile and increments the pointer to the current tile location
 func (g *MapGenerator) Step(width uint64) *Tile {
 	newAttrs := make(map[string]interface{})
-	for attr, _ := range g.Attributes {
-		newAttrs[attr] = g.Generators[attr](g.context...)
+	for attr, generator := range g.Generators {
+		newAttrs[attr] = generator(g.context...)
 	}
 	var delta uint64
 
