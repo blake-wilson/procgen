@@ -16,7 +16,7 @@ func linearGen() {
 	g.RegisterHeightGenerator(
 		func(tiles ...*gen.Tile) uint64 {
 			// add 5 to the height of the previous tile
-			return tiles[len(tiles)-1].Stop.Y + 5
+			return 5
 		})
 
 	g.AddTile(&gen.Tile{

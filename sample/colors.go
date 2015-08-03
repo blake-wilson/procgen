@@ -14,14 +14,14 @@ func colorGen() {
 	g.RegisterHeightGenerator(
 		func(tiles ...*gen.Tile) uint64 {
 			// add 5 to the height of the previous tile
-			return tiles[len(tiles)-1].Stop.Y + 5
+			return 5
 		})
 
 	colorGenFunc := func(t ...*gen.Tile) string {
 		// Increment hex color value
 		lastTile := t[len(t)-1]
 		newHexVal, _ := strconv.ParseInt(lastTile.Attributes["color"].(string), 16, 64)
-		newHexVal += 500
+		newHexVal += 500000
 		newHexVal = newHexVal % 16777215
 		return fmt.Sprintf("%06X", newHexVal)
 	}
