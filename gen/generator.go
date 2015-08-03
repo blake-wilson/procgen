@@ -54,11 +54,11 @@ func (g *MapGenerator) Step(width uint64) *Tile {
 	for attr, generator := range g.Generators {
 		newAttrs[attr] = generator(g.context...)
 	}
-	var delta uint64
 
 	var stop Coord
 	stop.X = g.pointer.X + width
-	stop.Y = g.pointer.Y + g.heightGen(g.context...)
+	delta := g.heightGen(g.context...)
+	stop.Y = g.pointer.Y + delta
 
 	newTile := NewTile(g.pointer, stop, newAttrs)
 	g.context = append(g.context, newTile)
