@@ -11,7 +11,7 @@ import (
 func SprintCSV(tiles ...*gen.Tile) string {
 	var str string
 	for _, tile := range tiles {
-		str += fmt.Sprintf("%v, %v", tile.Stop.X, tile.Stop.Y)
+		str += fmt.Sprintf("%v, %v", tile.Location.X, tile.Location.Y)
 		for _, attr := range tile.Attributes {
 			str += fmt.Sprintf(", %v", attr)
 		}

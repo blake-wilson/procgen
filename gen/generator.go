@@ -21,7 +21,7 @@ type MapGenerator struct {
 	Generators map[string]GenFunction
 
 	// Special generator which generates the height delta for the next tile
-	heightGen func(...*Tile) uint64
+	heightGen func(...*Tile) int64
 
 	// Maps each attribute to each other attribute. By indexing the
 	// probabilityMatrix with the name of an attribute, a map is returned
@@ -49,24 +49,20 @@ func (g *MapGenerator) GetTiles() []*Tile {
 }
 
 // Generates the next tile and increments the pointer to the current tile location
-func (g *MapGenerator) Step(width uint64) *Tile {
+func (g *MapGenerator) Step(width int64) *Tile {
 	newAttrs := make(map[string]interface{})
 	for attr, generator := range g.Generators {
 		newAttrs[attr] = generator(g.context...)
 	}
 
-	var stop Coord
-	stop.X = g.pointer.X + width
 	delta := g.heightGen(g.context...)
-	stop.Y = g.pointer.Y + delta
+	location := Coord{
+		X: g.pointer.X,
+		Y: g.pointer.Y,
+	}
 
-	newTile := NewTile(g.pointer, stop, newAttrs)
-	g.context = append(g.context, newTile)
-
-	// increments the pointer for the whole generator
-	g.pointer.X += width
-	g.pointer.Y += delta
-
+	newTile := NewTile(width, delta, location, newAttrs)
+	g.AddTile(newTile)
 	return newTile
 }
 
@@ -83,20 +79,20 @@ func (g *MapGenerator) UnregisterGenerator(attr string) {
 
 // Registers the height generator function. Subsequent calls will overwrite the
 // generator
-func (g *MapGenerator) RegisterHeightGenerator(f func(...*Tile) uint64) {
+func (g *MapGenerator) RegisterHeightGenerator(f func(...*Tile) int64) {
 	g.heightGen = f
 }
 
 // Set a tile manually to the next tile position
 func (g *MapGenerator) AddTile(t *Tile) {
 	g.context = append(g.context, t)
-	g.pointer.X += t.Stop.X - t.Start.X
+	g.pointer.X += t.Width
 
 	// Do not allow negative y values
-	if t.Height() < 0 && uint64(-1*t.Height()) > g.pointer.Y {
+	if t.Height+g.pointer.Y < 0 {
 		g.pointer.Y = 0
 	} else {
-		g.pointer.Y += uint64(t.Height())
+		g.pointer.Y += t.Height
 	}
 }
 
