@@ -4,14 +4,18 @@ var ctx = canvas.getContext("2d");
 ctx.beginPath();
 ctx.moveTo(0,0);
 
+canvasHeight = document.getElementById("map_canvas").height;
+
 function drawLine(start, end) {
 	ctx.beginPath();
-	ctx.moveTo(start.x, start.y);
+	ctx.moveTo(start.x, canvasHeight);
+	ctx.lineTo(start.x, start.y);
 	ctx.lineTo(end.x, end.y);
-	ctx.strokeStyle = start.color;
-	ctx.lineWidth = 10;
+	ctx.lineTo(end.x, canvasHeight);
+	ctx.fillStyle = start.color;
+	ctx.closePath();
+	ctx.fill();
 	console.log(start.color);
-	ctx.stroke();
 }
 
 function getValues(text) {
