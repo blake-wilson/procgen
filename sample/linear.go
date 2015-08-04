@@ -14,19 +14,17 @@ func linearGen() {
 	g := gen.NewGenerator()
 
 	g.RegisterHeightGenerator(
-		func(tiles ...*gen.Tile) uint64 {
+		func(tiles ...*gen.Tile) int64 {
 			// add 5 to the height of the previous tile
 			return 5
 		})
 
 	g.AddTile(&gen.Tile{
-		Start: gen.Coord{
+		Width:  20,
+		Height: 20,
+		Location: gen.Coord{
 			X: 0,
 			Y: 0,
-		},
-		Stop: gen.Coord{
-			X: 20,
-			Y: 20,
 		},
 	})
 	// generate 100 tiles - use width of 20
