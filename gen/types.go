@@ -1,36 +1,31 @@
 package gen
 
 type Coord struct {
-	X uint64
-	Y uint64
+	X int64
+	Y int64
 }
 
 type Tile struct {
-	Start Coord
-	Stop  Coord
+	Width  int64
+	Height int64
+
+	Location Coord
 
 	// The attributes belonging to the terrain.  Indexed by the attribute
 	// name - maps to the arbitrary attribute value
 	Attributes map[string]interface{}
 }
 
-func (t *Tile) Width() uint64 {
-	return t.Stop.X - t.Start.X
-}
-
-func (t *Tile) Height() int64 {
-	return int64(t.Stop.Y) - int64(t.Start.Y)
-}
-
-func NewTile(left Coord, right Coord, attributes map[string]interface{}) *Tile {
-	if right.X <= left.X {
+func NewTile(width, height int64, location Coord, attributes map[string]interface{}) *Tile {
+	if width < 0 {
 		// left coordinate must precede right
 		return nil
 	}
 
 	return &Tile{
-		Start:      left,
-		Stop:       right,
+		Width:      width,
+		Height:     height,
+		Location:   location,
 		Attributes: attributes,
 	}
 }
